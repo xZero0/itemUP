@@ -1,8 +1,14 @@
 #!/bin/env node
 //  OpenShift sample Node application
 var express = require('express');
-var fs      = require('fs');
+var http = require('http');
+var path = require('path');
+var favicon = require('static-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 
+var fs      = require('fs');
 
 /**
  *  Define the sample application.
@@ -24,6 +30,7 @@ var SampleApp = function() {
         //  Set the environment variables we need.
         self.ipaddress = process.env.OPENSHIFT_NODEJS_IP;
         self.port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+        self.app       = express();
 
         if (typeof self.ipaddress === "undefined") {
             //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
@@ -33,6 +40,53 @@ var SampleApp = function() {
         };
     };
 
+
+    self.setupViewEngine = function() {
+        // view engine setup
+        self.app.set('views', path.join(__dirname, 'views'));
+        self.app.set('view engine', 'jade');
+    };
+
+    self.setupApplication = function() {
+        self.app.use(favicon());
+        self.app.use(logger('dev'));
+        self.app.use(bodyParser.json());
+        self.app.use(bodyParser.urlencoded());
+        self.app.use(cookieParser());
+        self.app.use(express.static(path.join(__dirname, 'public')));
+        self.app.use(self.app.router);
+    };
+
+    self.setupErrorHandler = function() {
+        /// catch 404 and forwarding to error handler
+        self.app.use(function(req, res, next) {
+            var err = new Error('Not Found');
+            err.status = 404;
+            next(err);
+        });
+
+        /// error handlers
+
+        // development error handler
+        // will print stacktrace
+        if (self.app.get('env') === 'development') {
+            self.app.use(function(err, req, res, next) {
+                res.render('error', {
+                    message: err.message,
+                    error: err
+                });
+            });
+        }
+
+        // production error handler
+        // no stacktraces leaked to user
+        self.app.use(function(err, req, res, next) {
+            res.render('error', {
+                message: err.message,
+                error: {}
+            });
+        });
+    };
 
     /**
      *  Populate the cache.
@@ -92,18 +146,9 @@ var SampleApp = function() {
     /**
      *  Create the routing table entries + handlers for the application.
      */
-    self.createRoutes = function() {
-        self.routes = { };
-
-        self.routes['/asciimo'] = function(req, res) {
-            var link = "http://i.imgur.com/kmbjB.png";
-            res.send("<html><body><img src='" + link + "'></body></html>");
-        };
-
-        self.routes['/'] = function(req, res) {
-            res.setHeader('Content-Type', 'text/html');
-            res.send(self.cache_get('index.html') );
-        };
+    self.setupRoutes = function() {
+        // self.routes = { };
+        self.routes = require('./routes');
     };
 
 
@@ -112,8 +157,8 @@ var SampleApp = function() {
      *  the handlers.
      */
     self.initializeServer = function() {
-        self.createRoutes();
-        self.app = express.createServer();
+        self.app.get('/', self.routes.index);
+        // self.app = express.createServer();
 
         //  Add handlers for the app (from the routes).
         for (var r in self.routes) {
@@ -127,7 +172,10 @@ var SampleApp = function() {
      */
     self.initialize = function() {
         self.setupVariables();
-        self.populateCache();
+        self.setupRoutes();
+        self.setupViewEngine();
+        self.setupApplication();
+        self.setupErrorHandler();
         self.setupTerminationHandlers();
 
         // Create the express server and routes.
@@ -156,4 +204,5 @@ var SampleApp = function() {
 var zapp = new SampleApp();
 zapp.initialize();
 zapp.start();
+
 
