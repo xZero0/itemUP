@@ -90,7 +90,7 @@ var SampleApp = function() {
 
     /**
      *  Populate the cache.
-     *
+     */
     self.populateCache = function() {
         if (typeof self.zcache === "undefined") {
             self.zcache = { 'index.html': '' };
@@ -99,13 +99,13 @@ var SampleApp = function() {
         //  Local cache for static content.
         self.zcache['index.html'] = fs.readFileSync('./index.html');
     };
-    */
+
 
     /**
      *  Retrieve entry (content) from cache.
      *  @param {string} key  Key identifying content to retrieve from cache.
      */
-    // self.cache_get = function(key) { return self.zcache[key]; };
+    self.cache_get = function(key) { return self.zcache[key]; };
 
 
     /**
@@ -158,7 +158,7 @@ var SampleApp = function() {
      */
     self.initializeServer = function() {
         self.app.get('/', self.routes.index);
-        app.post('/menu1', self.routes.menu1);
+        // self.app.post('/menu1', self.routes.menu1);
 
         //  Add handlers for the app (from the routes).
         for (var r in self.routes) {
