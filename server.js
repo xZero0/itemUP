@@ -158,7 +158,7 @@ var SampleApp = function() {
      */
     self.initializeServer = function() {
         self.app.get('/', self.routes.index);
-        // self.app = express.createServer();
+        app.post('/menu1', self.routes.menu1);
 
         //  Add handlers for the app (from the routes).
         for (var r in self.routes) {
