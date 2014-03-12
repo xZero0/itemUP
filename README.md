@@ -1,4 +1,4 @@
 itemUP
 ======
 
-There are powerful items management system. 
+There is the powerful item management system. 
