@@ -1,7 +1,7 @@
 itemUP
 ======
 
-There is the powerful item management system.
+There is a powerful item management system.
 We'll develop on the `Dev stream` branch.
 
 The OpenShift `nodejs` cartridge documentation can be found at:
