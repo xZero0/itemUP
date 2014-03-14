@@ -1,15 +1,16 @@
-lib-cov
-*.seed
-*.log
-*.csv
-*.dat
-*.out
-*.pid
-*.gz
+﻿# Eclipse
+.classpath
+.project
+.settings/
 
-pids
-logs
-results
+# Intellij
+.idea/
+*.iml
+*.iws
 
-npm-debug.log
-node_modules
+# Mac
+.DS_Store
+
+# Maven
+log/
+target/
