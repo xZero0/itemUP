@@ -15,8 +15,6 @@
 log/
 target/
 
-# The openshift original code
-*_ori*
 
 lib-cov
 *.seed
@@ -26,6 +24,7 @@ lib-cov
 *.out
 *.pid
 *.gz
+*_ori*
 
 pids
 logs
