@@ -1,5 +1,5 @@
 /* GET index home page. -*/
 
 exports.index = function(req, res){
-  res.render('index', { title: 'itemUP!' });
+  res.render('index', { title: 'itemUP - The smart inventory management system' });
 };
