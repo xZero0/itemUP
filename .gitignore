@@ -16,8 +16,7 @@ log/
 target/
 
 # The openshift original code
-*_ori.html
-*_ori.js
+*_ori*
 
 lib-cov
 *.seed
