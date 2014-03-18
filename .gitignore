@@ -15,6 +15,11 @@
 log/
 target/
 
+# EditPlus Backup File
+*.bak
+
+# OpenShift original file
+*_ori*
 
 lib-cov
 *.seed
@@ -24,7 +29,7 @@ lib-cov
 *.out
 *.pid
 *.gz
-*_ori*
+
 
 pids
 logs
