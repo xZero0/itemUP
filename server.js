@@ -12,11 +12,9 @@ var bodyParser  = require('body-parser');
 var flash       = require('connect-flash');
 var util        = require('util');
 var mongoose    = require('mongoose'); 
+var passport    = require('passport');
 
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-
-var fs      = require('fs');
+var fs          = require('fs');
 
 /**
  *  Define the sample application.
@@ -82,8 +80,6 @@ var SampleApp = function() {
         self.app.use(passport.initialize());
         self.app.use(passport.session()); // persistent login sessions
         self.app.use(flash()); // use connect-flash for flash messages stored in session
-
-        self.app.use(self.app.router);
     };
 
     self.setupErrorHandler = function() {
@@ -177,7 +173,7 @@ var SampleApp = function() {
      */
     self.setupRoutes = function() {
         // self.routes = { };
-        require('./server-routes')(self.app);
+        require('./server-routes')(self.app, passport);
     };
 
 
@@ -186,9 +182,9 @@ var SampleApp = function() {
      */
     self.initialize = function() {
         self.setupVariables();
-        self.setupRoutes();
         self.setupViewEngine();
         self.setupApplication();
+        self.setupRoutes();
         self.setupErrorHandler();
         self.setupTerminationHandlers();
     };

@@ -3,10 +3,10 @@
 
 // LOGIN ===============================
 // =====================================
-exports.login = function(req, res){
+exports.signin = function(req, res){
 
     // render the page and pass in any flash data if it exists
-    res.render('user_login', { message: 'loginMessage' }); 
+    res.render('user_signin', { message: req.flash('loginMessage') }); 
 };
 
 // SIGNUP===============================
@@ -14,7 +14,7 @@ exports.login = function(req, res){
 exports.signup = function(req, res){
 
     // render the page and pass in any flash data if it exists
-    res.render('user_signup', { message: 'signupMessage' });
+    res.render('user_signup', { message: req.flash('signupMessage') });
 };
 
 
@@ -33,14 +33,3 @@ exports.logout = function(req, res){
     res.redirect('/');
 };
 
-
-// Route middleware to make sure a user is logged in
-function isLoggedIn(req, res, next) {
-
-    // if user is authenticated in the session, carry on 
-    if (req.isAuthenticated())
-        return next();
-
-    // if they aren't redirect them to the home page
-    res.redirect('/');
-}

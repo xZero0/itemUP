@@ -1,3 +1,5 @@
+// signup_layout
+
 doctype html
 html(lang='en',ng-app="dashApp")
     head
@@ -40,30 +42,4 @@ html(lang='en',ng-app="dashApp")
                             a(href="#about") About
                         li
                             a(href="#contact") Contact
-
-
-                    // Login form ========================================
-                    // ===================================================
-                    if !user
-                        ul(class="nav navbar-nav navbar-right")
-                            li
-                                a(href="/signup") Sign up
-                        form(class="navbar-form navbar-right", role="form", action="/signin", method="post")
-                            div(class="form-group")
-                                input(type="text", placeholder="Username", name="username", class="form-control")
-                            div(class="form-group")
-                                input(type="password", placeholder="Password", name="password", class="form-control")   
-                            button(type="submit", class="btn btn-success") Sign in
-                    else
-                        ul(class="nav navbar-nav navbar-right")
-                            li
-                                a(href="#", data-toggle="dropdown")
-                                    span(class="glyphicon glyphicon-user")  #{user.local.username} 
-                                    span(class="caret")
-                                ul(class="dropdown-menu")
-                                    li
-                                        a(href="/profile") Profile
-                                    li
-                                        a(href="/logout") Logout
-
         block content
