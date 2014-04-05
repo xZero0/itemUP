@@ -1,14 +1,14 @@
 extends layout
 
 block content  
- div(class="jumbotron")
-  div(class="container")
-   h1 Bootstrap starter template
-    p(class="lead",style='white-space:pre;') 
-     span(class="glyphicon glyphicon-search")
-     | Use this document as a way to quickly start any new project.
-     | All you get is this text and a mostly barebones HTML document.
-     | Test x, the user login...
-     | Test Aui
-     | Test CCC
-     | asd
+    div(class="container")
+        if !user
+            h1 Welcome to itemUP.
+        else
+            h1 Hi #{user.local.username}, welcome to itemUP.
+
+        p(class="lead") I'm a smart inventory management system.
+        span(class="glyphicon glyphicon-search" style='white-space:pre;') 
+        | 
+        | Use this document as a way to quickly start any new project.
+        | All you get is this text and a mostly barebones HTML document.
