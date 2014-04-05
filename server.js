@@ -2,18 +2,20 @@
 //  OpenShift sample Node application
 //  This file have to clean any test code. Please, consider it.
 
-var express = require('express');
-var http = require('http');
-var path = require('path');
-var favicon = require('static-favicon');
-var logger = require('morgan');
+var express     = require('express');
+var http        = require('http');
+var path        = require('path');
+var favicon     = require('static-favicon');
+var logger      = require('morgan');
 var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+var bodyParser  = require('body-parser');
+var flash       = require('connect-flash');
+var util        = require('util');
+var mongoose    = require('mongoose'); 
+
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var util = require('util');
-var flash = require('connect-flash');
-var mongoose = require('mongoose'); 
+
 var fs      = require('fs');
 
 /**
@@ -38,8 +40,16 @@ var SampleApp = function() {
         self.port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
         self.app       = express();
 
-        self.database = require('./config/database');  
-        mongoose.connect(self.database.url);     // connect to mongoDB database on modulus.io
+        // Database config =====================
+        // =====================================
+        self.configDB  = require('./config/database');  
+        mongoose.connect(self.configDB.url);     // connect to mongoDB database on modulus.io
+
+        
+        // Database config =====================
+        // =====================================
+        require('./config/passport')(passport); // pass passport for configuration
+
 
         if (typeof self.ipaddress === "undefined") {
             //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
@@ -61,13 +71,18 @@ var SampleApp = function() {
         self.app.use(express.session({
             secret : 'keyboard cat'
         }));
+        
         self.app.use(favicon());
         self.app.use(logger('dev'));
         self.app.use(express.json());
         self.app.use(express.urlencoded());
+
+        // required for passport
+        self.app.use(express.session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
         self.app.use(passport.initialize());
-        self.app.use(passport.session());
-        self.app.use(flash());
+        self.app.use(passport.session()); // persistent login sessions
+        self.app.use(flash()); // use connect-flash for flash messages stored in session
+
         self.app.use(self.app.router);
     };
 
