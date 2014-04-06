@@ -21,17 +21,17 @@ html(lang='en',ng-app="dashApp")
 
     body
         div(class="navbar navbar-inverse navbar-fixed-top", role="navigation")
-            div(class="container")
+            div(class="container-fluid")
                 // the brand
                 dic(class="navbar-header")
-                    button(type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1")
+                    button(type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse")
                         span(class="sr-only") Toggle navigation
                         span(class="icon-bar")
                         span(class="icon-bar")
                         span(class="icon-bar")
                     a(class="navbar-brand",href="#") itemUP
 
-                div(class="collapse navbar-collapse")
+                div(class="navbar-collapse collapse")
                     ul(class="nav navbar-nav")
                         li(class="active")
                             a(href="/") 
@@ -65,5 +65,4 @@ html(lang='en',ng-app="dashApp")
                                         a(href="/profile") Profile
                                     li
                                         a(href="/logout") Logout
-
         block content
