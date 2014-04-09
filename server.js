@@ -1,14 +1,20 @@
 #!/bin/env node
 //  OpenShift sample Node application
-var express = require('express');
-var http = require('http');
-var path = require('path');
-var favicon = require('static-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+//  This file have to clean any test code. Please, consider it.
 
-var fs      = require('fs');
+var express     = require('express');
+var http        = require('http');
+var path        = require('path');
+var favicon     = require('static-favicon');
+var logger      = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser  = require('body-parser');
+var flash       = require('connect-flash');
+var util        = require('util');
+var mongoose    = require('mongoose'); 
+var passport    = require('passport');
+
+var fs          = require('fs');
 
 /**
  *  Define the sample application.
@@ -32,6 +38,17 @@ var SampleApp = function() {
         self.port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
         self.app       = express();
 
+        // Database config =====================
+        // =====================================
+        self.configDB  = require('./config/database');  
+        mongoose.connect(self.configDB.url);     // connect to mongoDB database on modulus.io
+
+        
+        // Database config =====================
+        // =====================================
+        require('./config/passport')(passport); // pass passport for configuration
+
+
         if (typeof self.ipaddress === "undefined") {
             //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
             //  allows us to run/test the app locally.
@@ -40,7 +57,6 @@ var SampleApp = function() {
         };
     };
 
-
     self.setupViewEngine = function() {
         // view engine setup
         self.app.set('views', path.join(__dirname, 'views'));
@@ -48,13 +64,22 @@ var SampleApp = function() {
     };
 
     self.setupApplication = function() {
+        self.app.use(express.static(path.join(__dirname, 'public')));
+        self.app.use(cookieParser());
+        self.app.use(express.session({
+            secret : 'keyboard cat'
+        }));
+        
         self.app.use(favicon());
         self.app.use(logger('dev'));
-        self.app.use(bodyParser.json());
-        self.app.use(bodyParser.urlencoded());
-        self.app.use(cookieParser());
-        self.app.use(express.static(path.join(__dirname, 'public')));
-        self.app.use(self.app.router);
+        self.app.use(express.json());
+        self.app.use(express.urlencoded());
+
+        // required for passport
+        self.app.use(express.session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
+        self.app.use(passport.initialize());
+        self.app.use(passport.session()); // persistent login sessions
+        self.app.use(flash()); // use connect-flash for flash messages stored in session
     };
 
     self.setupErrorHandler = function() {
@@ -148,22 +173,7 @@ var SampleApp = function() {
      */
     self.setupRoutes = function() {
         // self.routes = { };
-        self.routes = require('./routes');
-    };
-
-
-    /**
-     *  Initialize the server (express) and create the routes and register
-     *  the handlers.
-     */
-    self.initializeServer = function() {
-        self.app.get('/', self.routes.index);
-        // self.app.post('/menu1', self.routes.menu1);
-
-        //  Add handlers for the app (from the routes).
-        for (var r in self.routes) {
-            self.app.get(r, self.routes[r]);
-        }
+        require('./server-routes')(self.app, passport);
     };
 
 
@@ -172,14 +182,11 @@ var SampleApp = function() {
      */
     self.initialize = function() {
         self.setupVariables();
-        self.setupRoutes();
         self.setupViewEngine();
         self.setupApplication();
+        self.setupRoutes();
         self.setupErrorHandler();
         self.setupTerminationHandlers();
-
-        // Create the express server and routes.
-        self.initializeServer();
     };
 
 
@@ -204,5 +211,3 @@ var SampleApp = function() {
 var zapp = new SampleApp();
 zapp.initialize();
 zapp.start();
-
-
