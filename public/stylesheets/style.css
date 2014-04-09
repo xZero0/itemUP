@@ -1,12 +1,8 @@
 body {
-  padding-top: 50px;
-  padding-bottom: 20px;
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-.starter-template {
-  padding: 40px 15px;
-  text-align: center;
-}
-.form-group{
-  padding-left: 2px;
-  padding-right: 2px;
+
+a {
+  color: #00B7FF;
 }
