@@ -1,21 +1,8 @@
 body {
-<<<<<<< HEAD
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
-=======
-  padding-top: 50px;
-  padding-bottom: 20px;
-}
-.starter-template {
-  padding: 40px 15px;
-  text-align: center;
-}
-.form-group{
-  padding-left: 2px;
-  padding-right: 2px;
->>>>>>> refs/remotes/origin/master
 }
