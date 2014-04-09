@@ -3,6 +3,6 @@
 
 module.exports = {
 
-	// the database url to connect
-	url : ${OPENSHIFT_MONGODB_DB_URL}/itemup
+    // the database url to connect
+    url : process.env.OPENSHIFT_MONGODB_DB_URL+'itemup'
 }
