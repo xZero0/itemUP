@@ -1,0 +1,32 @@
+// user_login.jade
+
+
+extends user_layout
+
+block content  
+    div(class="container")
+        div(class="col-sm-6")
+            h1 
+                span(class="fa fa-sign-in") Sign in to itemUP
+            // show any messages that come back with authentication
+            if message.length > 0
+                div(class="alert alert-danger") #{message}
+
+
+            // LOGIN FORM
+            form(action="/signin" method="post")
+                div(class="form-group")
+                    label Username
+                        input(type="text" class="form-control" name="username")
+                div(class="form-group")
+                    label Password
+                        input(type="password" class="form-control" name="password")
+                button(type="submit" class="btn btn-warning btn-lg") Sign in
+
+            hr
+            p Need an account?  
+                a(href="/signup") 
+                    span  Sign up
+            p Or go 
+                a(href="/") 
+                    span  home

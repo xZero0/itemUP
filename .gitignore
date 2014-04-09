@@ -1,3 +1,26 @@
+﻿# Eclipse
+.classpath
+.project
+.settings/
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+target/
+
+# EditPlus Backup File
+*.bak
+
+# OpenShift original file
+*_ori*
+
 lib-cov
 *.seed
 *.log
@@ -7,9 +30,11 @@ lib-cov
 *.pid
 *.gz
 
+
 pids
 logs
 results
 
 npm-debug.log
 node_modules
+.openshift
