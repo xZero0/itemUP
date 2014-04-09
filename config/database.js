@@ -4,5 +4,5 @@
 module.exports = {
 
 	// the database url to connect
-	url : 'mongodb://localhost:27017/dev-itemup'
+	url : $OPENSHIFT_MONGODB_DB_URL/itemup
 }
