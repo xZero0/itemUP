@@ -3,6 +3,7 @@
 //  This file have to clean any test code. Please, consider it.
 
 var express     = require('express');
+var i18n        = require('i18n');
 var http        = require('http');
 var path        = require('path');
 var favicon     = require('static-favicon');
@@ -19,7 +20,7 @@ var fs          = require('fs');
 /**
  *  Define the sample application.
  */
-var SampleApp = function() {
+var SimsApp = function() {
 
     //  Scope.
     var self = this;
@@ -37,17 +38,20 @@ var SampleApp = function() {
         self.ipaddress = process.env.OPENSHIFT_NODEJS_IP;
         self.port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
         self.app       = express();
+        self.i18n      = i18n;
 
         // Database config =====================
         // =====================================
-        self.configDB  = require('./config/database');  
-        mongoose.connect(self.configDB.url);     // connect to mongoDB database on modulus.io
+       // self.configDB  = require('./config/database');  
+       // mongoose.connect(self.configDB.url);     // connect to mongoDB database on modulus.io
 
         
         // Database config =====================
         // =====================================
         require('./config/passport')(passport); // pass passport for configuration
 
+        // Locale config
+        self.i18n.configure(require('./config/i18n'));
 
         if (typeof self.ipaddress === "undefined") {
             //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
@@ -77,6 +81,7 @@ var SampleApp = function() {
 
         // required for passport
         self.app.use(express.session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
+        self.app.use(self.i18n.init); 
         self.app.use(passport.initialize());
         self.app.use(passport.session()); // persistent login sessions
         self.app.use(flash()); // use connect-flash for flash messages stored in session
@@ -208,6 +213,6 @@ var SampleApp = function() {
 /**
  *  main():  Main code.
  */
-var zapp = new SampleApp();
-zapp.initialize();
-zapp.start();
+var simps = new SimsApp();
+simps.initialize();
+simps.start();
